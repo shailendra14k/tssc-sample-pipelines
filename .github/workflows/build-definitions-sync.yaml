@@ -1,14 +1,11 @@
 name: Pull changes from build-definitions
-
 on:
   schedule:
-  - cron:  "0 0 * * *"
+    - cron: "0 0 * * *"
   workflow_dispatch:
-
 permissions:
   contents: write
   pull-requests: write
-
 jobs:
   build-definitions-sync:
     runs-on: ubuntu-latest
@@ -18,18 +15,15 @@ jobs:
         with:
           path: tssc-sample-pipelines
           ref: main
-
       - name: Checkout build-definitions
         uses: actions/checkout@v4
         with:
           repository: konflux-ci/build-definitions
           path: build-definitions
-
       - name: Synchronize build-definitions
         run: |
           export BUILD_DEFINITIONS=$GITHUB_WORKSPACE/build-definitions
           $GITHUB_WORKSPACE/tssc-sample-pipelines/hack/import-build-definitions
-
       - name: Create a PR with the changes
         env:
           GH_TOKEN: ${{ github.token }}
