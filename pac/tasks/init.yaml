@@ -4,12 +4,11 @@ metadata:
   labels:
     app.kubernetes.io/version: "0.2"
   annotations:
-    tekton.dev/pipelines.minVersion: "0.12.1"
-    tekton.dev/tags: "konflux"
+    tekton.dev/pipelines.minVersion: 0.12.1
+    tekton.dev/tags: konflux
   name: init
 spec:
-  description: >-
-    Initialize Pipeline Task, include flags for rebuild and auth. Generates image repository secret used by the PipelineRun.
+  description: Initialize Pipeline Task, include flags for rebuild and auth. Generates image repository secret used by the PipelineRun.
   params:
     - name: image-url
       description: Image URL for build by PipelineRun
