@@ -40,7 +40,7 @@ else
   exit 1
 fi
 
-# do pipelines first, and then only copy tasks required by those pipelines 
+# do pipelines first, and then only copy tasks required by those pipelines
 INDIVIDUAL_PIPELINES=$( yq .resources $IMPORT_PIPELINES_DIR/kustomization.yaml  | sed s/-// | xargs -n1 echo -n " ")
 
 for pipe in $INDIVIDUAL_PIPELINES
@@ -61,45 +61,48 @@ if [ -f $PIPE_FILE_OR_DIR ]; then
   fi
 
 done
- 
-CREATE_CATALOG=false 
-rm -rf $PIPELINES_CATALOG_EXPORT 
-rm -rf $TASKS_CATALOG_EXPORT 
+
+CREATE_CATALOG=false
+rm -rf $PIPELINES_CATALOG_EXPORT
+rm -rf $TASKS_CATALOG_EXPORT
 if [ $CREATE_CATALOG == "true" ]; then
-  mkdir -p $PIPELINES_CATALOG_EXPORT 
-  mkdir -p $TASKS_CATALOG_EXPORT 
-fi 
+  mkdir -p $PIPELINES_CATALOG_EXPORT
+  mkdir -p $TASKS_CATALOG_EXPORT
+fi
 
 for pipeline in $OUTPUT_PIPELINES_DIR/* ;  do
   echo
-  echo $pipeline 
-  TASKS=$(yq .spec.tasks.[].taskRef.name $pipeline )  
+  echo $pipeline
+  TASKS=$(yq .spec.tasks.[].taskRef.name $pipeline )
   FINALLY=$(yq .spec.finally.[].taskRef.name $pipeline )
   # Temporarily keep some to ensure existing templates work
-  # until they have been merged for backwards compatibilty  
+  # until they have been merged for backwards compatibilty
   KEEP=""
-  
-  echo "Tasks referenced from $(basename $pipeline):" 
+
+  echo "Tasks referenced from $(basename $pipeline):"
   for task in $TASKS $FINALLY $KEEP
-  do  
-    if [ $CREATE_CATALOG == "true" ]; then 
-      echo "Catalog "  
+  do
+    if [ $CREATE_CATALOG == "true" ]; then
+      echo "Catalog "
       cp -r $IMPORT_TASKS_DIR/$task/ $TASKS_CATALOG_EXPORT/$task
-    fi 
- 
+    fi
+
     VERSIONDIR=$(ls -d $IMPORT_TASKS_DIR/$task/*/ | sort -t. -k 1,1n -k 2,2n -k 3,3n -k 4,4n | tail -n1)
-    echo " $task in $task.yaml" 
+    echo " $task in $task.yaml"
     if [ -f $VERSIONDIR/$task.yaml ]; then
       cp $VERSIONDIR/$task.yaml $OUTPUT_TASKS_DIR/$task.yaml
     elif [ -f $VERSIONDIR/kustomization.yaml ]; then
       kustomize build $VERSIONDIR > $OUTPUT_TASKS_DIR/$task.yaml
     else
       echo Unable to apply task in $VERSIONDIR
-    fi 
-  done 
-done 
+    fi
+
+    # Apply consistent style
+    yq -i '.' "$OUTPUT_TASKS_DIR/$task.yaml"
+  done
+done
 
 echo
-echo "update-pipelinerun-imports" 
+echo "update-pipelinerun-imports"
 bash $SCRIPTDIR/update-pipelinerun-imports
 bash $SCRIPTDIR/patch-tasks

@@ -22,7 +22,6 @@ spec:
   results:
     - name: build
       description: Defines if the image in param image-url should be built
-
   steps:
     - name: init
       image: registry.access.redhat.com/ubi9/skopeo:9.6-1752647240@sha256:cbf079a41e8dded35a1292730513857292930a2780e39f56d998ee4f3dadb856
