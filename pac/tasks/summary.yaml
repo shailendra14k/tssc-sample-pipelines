@@ -4,12 +4,11 @@ metadata:
   labels:
     app.kubernetes.io/version: "0.2"
   annotations:
-    tekton.dev/pipelines.minVersion: "0.12.1"
-    tekton.dev/tags: "konflux"
+    tekton.dev/pipelines.minVersion: 0.12.1
+    tekton.dev/tags: konflux
   name: summary
 spec:
-  description: >-
-    Summary Pipeline Task. Prints PipelineRun information, removes image repository secret used by the PipelineRun.
+  description: Summary Pipeline Task. Prints PipelineRun information, removes image repository secret used by the PipelineRun.
   params:
     - name: pipelinerun-name
       description: pipeline-run to annotate
@@ -40,7 +39,7 @@ spec:
         - name: BUILD_TASK_STATUS
           value: $(params.build-task-status)
         - name: SOURCE_BUILD_RESULT_FILE
-          value: "$(workspaces.workspace.path)/source_build_result.json"
+          value: $(workspaces.workspace.path)/source_build_result.json
       script: |
         #!/usr/bin/env bash
         echo

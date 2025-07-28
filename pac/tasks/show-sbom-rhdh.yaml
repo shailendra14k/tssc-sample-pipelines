@@ -5,16 +5,15 @@ metadata:
   name: show-sbom-rhdh
   labels:
     app.kubernetes.io/version: "0.1"
-    build.appstudio.redhat.com/build_type: "docker"
+    build.appstudio.redhat.com/build_type: docker
   annotations:
-    tekton.dev/pipelines.minVersion: "0.12.1"
-    tekton.dev/tags: "containers, rhtap"
+    tekton.dev/pipelines.minVersion: 0.12.1
+    tekton.dev/tags: containers, rhtap
     task.results.format: application/text
     task.results.key: LINK_TO_SBOM
     task.output.location: results
 spec:
-  description: >-
-    Shows the Software Bill of Materials (SBOM) generated for the built image. The 'task.*' annotations are processed by Red Hat Developer Hub (RHDH) so that the log content can be rendered in its UI.
+  description: Shows the Software Bill of Materials (SBOM) generated for the built image. The 'task.*' annotations are processed by Red Hat Developer Hub (RHDH) so that the log content can be rendered in its UI.
   params:
     - name: IMAGE_URL
       description: Fully qualified image name to show SBOM for.

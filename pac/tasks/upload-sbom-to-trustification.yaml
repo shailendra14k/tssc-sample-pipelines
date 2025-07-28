@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1
 kind: Task
 metadata:
   annotations:
-    tekton.dev/tags: "sbom, trustification"
+    tekton.dev/tags: sbom, trustification
   name: upload-sbom-to-trustification
   labels:
     app.kubernetes.io/version: "0.1"
@@ -32,13 +32,12 @@ spec:
         `syft convert` to the supported version before uploading.
   params:
     - name: SBOMS_DIR
-      default: "."
-      description: >-
-        Directory containing SBOM files. The task will search for CycloneDX JSON SBOMs recursively in this directory and upload them all to Trustification. The path is relative to the 'sboms' workspace.
+      default: .
+      description: Directory containing SBOM files. The task will search for CycloneDX JSON SBOMs recursively in this directory and upload them all to Trustification. The path is relative to the 'sboms' workspace.
       type: string
     - name: HTTP_RETRIES
       default: "3"
-      description: "Maximum number of retries for transient HTTP(S) errors"
+      description: Maximum number of retries for transient HTTP(S) errors
       type: string
     - name: TRUSTIFICATION_SECRET_NAME
       default: trustification-secret
@@ -46,8 +45,7 @@ spec:
       type: string
     - name: FAIL_IF_TRUSTIFICATION_NOT_CONFIGURED
       default: "true"
-      description: >-
-        Should the task fail if the Secret does not contain the required keys? (Set "true" to fail, "false" to skip uploading and exit with success).
+      description: Should the task fail if the Secret does not contain the required keys? (Set "true" to fail, "false" to skip uploading and exit with success).
       type: string
   workspaces:
     - name: sboms

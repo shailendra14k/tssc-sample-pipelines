@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1
 kind: Task
 metadata:
   annotations:
-    tekton.dev/tags: "sbom, attestation, cosign"
+    tekton.dev/tags: sbom, attestation, cosign
   name: download-sbom-from-url-in-attestation
   labels:
     app.kubernetes.io/version: "0.1"
@@ -35,22 +35,19 @@ spec:
     [gather-deploy-images]: https://github.com/redhat-appstudio/build-definitions/tree/main/task/gather-deploy-images
   params:
     - name: IMAGES
-      description: >-
-        JSON object containing the array of images whose SBOMs should be downloaded. See the description for more details.
+      description: JSON object containing the array of images whose SBOMs should be downloaded. See the description for more details.
       type: string
     - name: SBOMS_DIR
-      default: "."
-      description: >-
-        Path to directory (relative to the 'sboms' workspace) where SBOMs should be downloaded.
+      default: .
+      description: Path to directory (relative to the 'sboms' workspace) where SBOMs should be downloaded.
       type: string
     - name: HTTP_RETRIES
       default: "3"
-      description: "Maximum number of retries for transient HTTP(S) errors"
+      description: Maximum number of retries for transient HTTP(S) errors
       type: string
     - name: PUBLIC_KEY
       type: string
-      description: >-
-        Public key used to verify signatures. Must be a valid k8s cosign reference, e.g. k8s://my-space/my-secret where my-secret contains the expected cosign.pub attribute.
+      description: Public key used to verify signatures. Must be a valid k8s cosign reference, e.g. k8s://my-space/my-secret where my-secret contains the expected cosign.pub attribute.
       default: ""
     - name: REKOR_HOST
       type: string
@@ -58,8 +55,7 @@ spec:
       default: ""
     - name: IGNORE_REKOR
       type: string
-      description: >-
-        Skip Rekor transparency log checks during validation.
+      description: Skip Rekor transparency log checks during validation.
       default: "false"
     - name: TUF_MIRROR
       type: string

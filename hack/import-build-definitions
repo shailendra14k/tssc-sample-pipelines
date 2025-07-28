@@ -96,9 +96,6 @@ for pipeline in $OUTPUT_PIPELINES_DIR/* ;  do
     else
       echo Unable to apply task in $VERSIONDIR
     fi
-
-    # Apply consistent style
-    yq -i '.' "$OUTPUT_TASKS_DIR/$task.yaml"
   done
 done
 
@@ -106,3 +103,12 @@ echo
 echo "update-pipelinerun-imports"
 bash $SCRIPTDIR/update-pipelinerun-imports
 bash $SCRIPTDIR/patch-tasks
+
+echo 'ensure consistent formatting'
+tasks=("${OUTPUT_TASKS_DIR}"/*.yaml)
+pipelines=("${OUTPUT_PIPELINES_DIR}"/*.yaml)
+all=( "${tasks[@]}" "${pipelines[@]}")
+for f in "${all[@]}"; do
+    yq -i --prettyPrint --indent=2 '.' "${f}"
+done
+
