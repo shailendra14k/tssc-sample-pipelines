@@ -63,6 +63,10 @@ spec:
         value: $(params.TLSVERIFY)
       - name: BUILD_ARGS_FILE
         value: $(params.BUILD_ARGS_FILE)
+      - name: _BUILDAH_STARTED_IN_USERNS
+        value: ""
+      - name: BUILDAH_ISOLATION
+        value: chroot
   steps:
     - name: build
       image: quay.io/redhat-appstudio/rhtap-task-runner:latest

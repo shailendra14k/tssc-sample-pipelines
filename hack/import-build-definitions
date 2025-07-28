@@ -106,6 +106,19 @@ for pipeline in $OUTPUT_PIPELINES_DIR/* ;  do
         '.spec.steps[] *= {"image": "'${RUNNER_IMAGE}'","imagePullPolicy":"Always"}' \
         "${OUTPUT_TASKS_DIR}/${task}.yaml"
 
+    # To run buildah within a container, we need to set a couple of environment variables to get
+    # around certain permission restrictions. These are the same ones that are set on the official
+    # Red Hat buildah image, as seen in their Dockerfile:
+    # https://catalog.redhat.com/software/containers/ubi10/buildah/673c73f6d9b2c90f6205aeb3?container-tabs=dockerfile
+    if [ "$task" == 'buildah-rhtap' ]; then
+        yq -i \
+            '.spec.stepTemplate.env += [
+                {"name":"_BUILDAH_STARTED_IN_USERNS","value":""},
+                {"name":"BUILDAH_ISOLATION","value":"chroot"
+            }]' \
+            "${OUTPUT_TASKS_DIR}/${task}.yaml"
+    fi
+
   done
 done
 
