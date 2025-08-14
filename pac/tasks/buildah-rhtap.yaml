@@ -100,6 +100,10 @@ spec:
           BUILDAH_ARGS+=("--build-arg=$build_arg")
         done
 
+        #login 
+        
+        buildah login -u admin -p V0LghrhDGS4HCnWO tssc-quay-quay-tssc-quay.apps.shailendra14k.in
+
         # Build the image
         buildah build \
           "${BUILDAH_ARGS[@]}" \
